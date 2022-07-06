@@ -1,25 +1,23 @@
+import { sort_vehicle } from "../../function/sort-vehicles.function";
 import { get_sorting_icon } from "../../function/sorting-icon.function";
 import { get_new_sorting_state } from "../../function/sorting-state.function";
+import { INIT_SORT_STATE } from "../constant/sort-state.constant";
 
 
-export function TableHeader({ columns, setSortingValues })
+export function TableHeader({ columns, setSortingValues, setVehicles })
 {
-    function update_sort_state(accessor, state)
+    function sort_vehicles(accessor, state)
     {
-        console.log( accessor, state )
-        console.log( get_new_sorting_state(state) )
+        const new_state = new Object();
+        new_state[accessor] = get_new_sorting_state(state);
 
-        setSortingValues( 
-            prev_state => 
-            {
-                const new_state = new Object();
-                new_state[accessor] = get_new_sorting_state(state);
+        setSortingValues({   
+            ...INIT_SORT_STATE,
+            ...new_state
+        });
 
-                return {
-                    ...prev_state,
-                    ...new_state
-                }
-            }
+        setVehicles(
+            (prevState) => ( prevState.sort( sort_vehicle(accessor, state) ) )
         )
     }
 
@@ -31,7 +29,7 @@ export function TableHeader({ columns, setSortingValues })
                     ({ label, accessor, sorting_state }) => 
                     { 
                         return (
-                            <th key={accessor} onClick={() => update_sort_state(accessor, sorting_state)}>
+                            <th key={accessor} onClick={() => sort_vehicles(accessor, sorting_state)}>
                                 <div className="container">
                                     <span className="header-name">{label}</span>
                                     <span className="sorting-state">{get_sorting_icon(sorting_state)}</span>

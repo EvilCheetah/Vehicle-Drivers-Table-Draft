@@ -4,7 +4,7 @@ import { _get_document_status } from "../../function/document-status.function";
 import { TableRow } from "./TableRow";
 
 
-export function TableBody({ vehicles }: any)
+export function TableBody({ vehicles })
 {
     return (
         <>
